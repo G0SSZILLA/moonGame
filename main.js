@@ -29,16 +29,10 @@ let upgrades = {
         }
     },
 };
-
 let cheese = 10000
 let harvest = 1
 let cheeseMod = 0
-    // let pickaxePrice = 0
-    // let bigPickaxePrice = 0
-    // let roverPrice = 0
-    // let bigRoverPrice = 0
-
-//NOTE this function adds one cheese when user clicks moon.
+    //NOTE this function adds one cheese when user clicks moon.
 
 function mine() {
     let autoUpgradesRovers = upgrades.auto.rovers.quantity * upgrades.auto.rovers.multiplier
@@ -59,7 +53,13 @@ function update() {
 
     document.getElementById('bigRover').innerText = upgrades.auto.bigRovers.quantity.toString()
 
-    // document.getElementById('pickaxePrice').innerText = pickaxePrice.toString()
+    document.getElementById('pickaxePrice').innerText = upgrades.click.pickaxes.price.toString()
+
+    document.getElementById('bigPickaxePrice').innerText = upgrades.click.bigPickaxes.price.toString()
+
+    document.getElementById('roverPrice').innerText = upgrades.auto.rovers.price.toString()
+
+    document.getElementById('bigRoverPrice').innerText = upgrades.auto.bigRovers.toString()
 
 }
 
@@ -80,18 +80,8 @@ function buyItem(type, item) {
     }
     update()
     drawMultiplierStat()
-        // priceInc()
 
 }
-
-// function priceInc(type, item) {
-//     let priceAdd = upgrades[type][item].price = upgrades[type][item].price * 2
-
-
-
-//     document.getElementById('pickaxePrice').innerText = priceAdd.toString()
-// }
-
 // NOTE  this will iterate over the automaticUpgrades, total the quantity of each automaticUpgrade times their multiplier, and add that value to the cheese resource.
 
 function applyMods() {
