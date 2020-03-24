@@ -28,21 +28,18 @@ let upgrades = {
             multiplier: 45,
         }
     },
-
-
 };
-
 
 let cheese = 10000
 let harvest = 1
-
+let cheeseMod = 0
 
 //NOTE this function adds one cheese when user clicks moon.
 
 function mine() {
-    cheese
-    cheese += harvest
-
+    let autoUpgradesRovers = upgrades.auto.rovers.quantity * upgrades.auto.rovers.multiplier
+    let autoUpgradesBigRovers = upgrades.auto.bigRovers.quantity * upgrades.auto.bigRovers.multiplier
+    cheese += 1 + autoUpgradesRovers + autoUpgradesBigRovers + cheeseMod + harvest
 
     update()
 }
@@ -58,42 +55,56 @@ function update() {
 
     document.getElementById('bigRover').innerText = upgrades.auto.bigRovers.quantity.toString()
 
-    // document.getElementById('pickaxePrice').innerText = buyItem()
-
 }
 
 // NOTE this method will be responsible for checking if the user has the resources, and if they do increasing the pickaxe purchased count, and decreasing the cheese resources by the appropriate amount.
 
-
 function buyItem(type, item) {
+
     if (cheese >= upgrades[type][item].price) {
         upgrades[type][item].quantity++;
         cheese -= upgrades[type][item].price;
         upgrades[type][item].price *= 2
-
+        harvest += upgrades[type][item].quantity * upgrades[type][item].price
     }
-    if (type == 'click') {
-        harvest *= upgrades.click[item].multiplier
-    }
-
     if (item == 'rovers') {
         startInterval()
 
     }
     update()
+    drawMultiplierStat()
+
 }
 
 // NOTE  this will iterate over the automaticUpgrades, total the quantity of each automaticUpgrade times their multiplier, and add that value to the cheese resource.
 
+function applyMods(type) {
+    let cheeseMod = upgrades.click.pickaxes.quantity * upgrades.click.pickaxes.multiplier
+    cheese += cheeseMod
+    document.getElementById('cheeseCount').innerText = cheeseMod.toString()
+}
+
+function drawMultiplierStat() {
+    let multiplier = 0
+    for (let type in upgrades.click) {
+        multiplier += upgrades.click[type].quantity * upgrades.click[type].multiplier
+    }
+    document.getElementById('cheeseMultiplier').innerText = multiplier.toString();
+}
+
 function startInterval() {
-    collectionInterval = setInterval(collectAutoUpgrades, 3000);
+    setInterval(collectAutoUpgrades, 3000);
 }
 
 function collectAutoUpgrades() {
-    // let collectionInterval = upgrades.auto.rovers.multiplier *= harvest
-    // return collectionInterval
-    mine()
+    let cps = 0
+    for (let key in upgrades.auto) {
+        cps += upgrades.auto[key].multiplier * upgrades.auto[key].quantity
+        cheese += cps
+    }
+    document.getElementById('cheesePerSecond').innerText = cps.toString()
 }
 
-
-// NOTE this method will add the apropriate modifier and use it with the mine.
+startInterval()
+drawMultiplierStat()
+applyMods()
